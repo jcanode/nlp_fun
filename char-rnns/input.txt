@@ -1,0 +1,64 @@
+Project 6: Render Your Scene With Primitives
+
+James Fritz, Joe Samyn, Justin Canode 
+Grand Canyon University
+CST-310: Computer Graphics Lecture & Lab
+Dr. Ricardo Citro
+November 7, 2020
+
+Introduction
+In this project we explored generating fractals in openGl. To do this, we used a L-system with a grammar made up of a set of production rules to generate an instruction string to describe the fractal pattern. This instruction string was then read by a turtle graphics system which processed the string and displayed the results. - Justin 
+Theoretical background explained, including descriptions of concepts in fractal geometry, L-Systems, the role of fractals in art, the types of applications in which fractals are used
+
+Theoretical Background
+A fractal is a set that is self-similar, meaning that it recursively appears in itself. An example of this is the Sierpinski triangle which we implemented in OpenGL in project 1.  The Sierpinski consists of a triangle oriented upward, with another triangle oriented downward inside, this creates a triangle shape with three upward orientated triangles and a downward oriented triangle hole in the center. This pattern is repeated recursively. There are several ways to generate this pattern, including the chaos game which we used for project 1, cellular automata, and what we used in this project, L-systems. A l-system (Lindenmayer System) is a way to display fractals using a turtle analogy. A L-system uses a start axiom, Then a set of production rules to replace the non-terminal symbols, when this is finished a string is generated consisting of only terminal symbols. These can then be read and displayed by a turtle graphics system. Fractals are commonly used in art, although not mathematically defined until the 20th century, the design of the sierpinski triangle can be found on floors of italian churches from the 11th century, almost 900 years before Sierpinski. Beyond looking pretty, there are several uses for fractals, noticeably, and relevant for this class, is the use of fractals to generate tree designs for computer graphics (Oppenheimer, 1986). For example, if a game wanted to have a player walk through a forest, then they could use fractals to generate the trees. In the next project we will further explore this use of fractals. - Justin 
+
+Mathematical concepts explained, including the definition of fractals, detailed explanations of all the formulas used and of their variables
+
+Mathematical concepts
+A pure fractal is a geometric shape that is self similar through infinite iterations in a recursive pattern and through infinite detail. It is essentially a shape made of a pattern that repeats infinitely, and every part of the fractal no matter who zoomed in or zoomed out you are, looks roughly the same. All fractals show a degree of what is known as self similarity. The self similar patterns are the result of generally simple equations or algorithms.  The fractal is created by repeating the pattern created by the algorithm over and over again in a recursive manner.  The second thing all fractals contain is a concept of non-integer dimension. This is a difficult concept to explain, but essentially fractals fall in a dimension that is in between two integer dimensions.  If a straight line has a dimension of one, a fractal will have a dimension that lies between one and two depending on how much space it takes up.  There are many types of fractals that are made up of various mathematical concepts.  The fractal system used in this project is known as an iterated function system fractal.
+Iterated function system fractals are created on the basis of simple plane transformation such as scaling, dislocation, and  around plane axis. The Sierpinski Triangle is an example of a  that is produced from an iterated function system. The first mathematical concept needed to understand these types of fractals is the concept size  how size of the fractal increases. The size of the fractal can be obtained by multiplying the dimension and linear scaling. If D is the dimension and L is the linear scaling, the size increase can be demonstrated byhis formula can be rearranged to get the formula forsing the Sierpinski triangle as a reference, if the linear dimension of the basis triangle is doubled, then the area of the whole fractal increases by an area of three.  Using the equation above to get the dimension of the fractal we gethis shows that the triangle does not lie in an integer dimension. As mentioned above, the fractals are generated using a recursive approach to achieve the repeating pattern. This can be represented using a of iterations
+r = scaling factor
+d = dimension
+
+Our ground plane is generated from a Sierpinski formula provided in the assignment instructions. We used this as it gave a nice variable surface to build trees for project 7. It takes a line and splits it into three lines at predetermined angles from each other. Each line segment is then split the same way, and the L-System continues until it generates the fractal. - Joe
+
+Programming implementation decisions explained (data structures, classes, style, overall code organization, etc.)
+
+Code Structure Explanation
+Our code is separated into the main.cpp and lsystem.h files. The main.cpp contains the turtle and  logic, along with the main drawing logic for the project. The various turtle instructions received from the L-system are stored in a string.  The angles for each of the dimensions is stored in an array, and the turtle and all its properties are stored in a struct. The struct makes it possible to store a snapshot of the entire turtle and all its properties in a stack. This can be used to create increasingly complex and interesting designs such as trees. 
+The lsystem.h file contains the logic for reading instructions from the text file, processing them, and converting the instructions to the proper grammar for the turtle. The rules and replacements are each stored in a vector of strings. Vectors are chosen often in this project because of their dynamic size. As mentioned above, strings are used to store the final instruction string and the processed instruction string.  This is because strings are essentially character arrays, and it allows for each character in the string to be iterated over and the turtle method that corresponds to the character can be called.  This logic was split off into a separate file because it will be required to handle more complex processes in project 7.   - Joe
+
+Definitions of all grammars, reasoning for each, and 2 examples for each grammar
+
+Definition of Grammars
+For the Sierpinski file, the length of the lines drawn by the turtle is specified as the value after len: . In this case 1. The number of iterations is written after iter: , which is 6. Then the rotation data is defined with each number separated by whitespace following the rot:  specifier. There are a number of replacements, which simply replace one character with another (for our case, R to F, and L to F, shown as rep: R,F and rep: L,F respectively). Then the starting string is defined (start: R). The lines after that are the rules for each system (L: R+L+R, R: L-R-L). Any comments have # in front of them and are ignored by the program. - James
+The grammar for the system is documented below:
+A flowchart depicting the logic of your approach for generating a forest
+
+Flowchart of logic for generating forest
+A flowchart depicting the logic of your approach for generating a forest
+
+(flowchart by James)
+
+Code examples
+L SYSTEM
+
+
+This is a portion of the L System. It takes user input from a file called rules.txt, and generates the values necessary for the turtle. This first portion adds the various portions of data to string and vectors defined above this code snippet. Once it is done filling those vectors and strings, the file is closed. - James
+
+This portion takes the inputs and generates the fractal code by iterating through it a number of iterations specified in the file. It checks the vectors storing the rules characters and then applying those rules to the processedInput string. - James
+TURTLE/GRAPHICS 	
+To actually display the fractal we used a turtle graphics system. A turtle graphics system has a few main requirements, one, a position in space, and an angle for the change in direction that it is facing (Goldman). A more advanced turtle may have other variables such as line thickness or color, but we just left those as constants. So we define our turtle to be a struct consisting of x,y, and z, points to represent its location in 3d euclidean space, and an angle which can range between 0 and 360 degrees. This angle is used to control the direction that the turtle is traveling on. - Justin
+
+To actually use the turtle, we define this forward and draw function that is called when a symbol from the instruction is read that says to go forward. This function first moves the turtle to the correct position, then draws a sphere to mark where a tree will be drawn for project 7. After that, the current position is saved as the old point. The angle is converted to radians for calculations, then the x and z values of the turtle are set from the new angle, to be the new point. Finally the line is drawn from the old position to the new one, and the function ends, ready to draw another line if called. - Justin
+
+Screenshots  
+Output: 
+
+
+Conclusion
+In this project we used production rules in a file to define a L-system. This L-system was for the Sierpinski triangle. The L-system uses the production rules as defined in a configuration rule to generate an instruction string. This string was then read by a turtle graphics system which processed the string and displayed the resulting fractal. - Justin 
+References 
+Conversano, Elisa; Tedeschini-Lalli, Laura (2011), "Sierpinski Triangles in Stone on Medieval Floors in 
+Rome". Retrieved November 09, 2020, from
